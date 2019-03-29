@@ -44,16 +44,16 @@ end Sender;
 
 architecture Behavioral of Sender is
 
-signal n : std_logic_vector(2 downto 0):= "111";
+signal n : std_logic_vector(2 downto 0):= "110";
 signal i : std_logic_vector(2 downto 0):= "000";
 
-type str is array (6 downto 0) of std_logic_vector(7 downto 0);
-signal NETID : str := (x"61",x"6a",x"72", x"32", x"33", x"34", x"0a");
+type str is array (0 to 5) of std_logic_vector(7 downto 0);
+signal NETID : str := (x"61",x"6a",x"72", x"32", x"33", x"34");
 
 type state is (idle, busyA, busyB, busyC);
 signal cur : state := idle;
 
-
+--61 6a 72 32 33 34 
 
 --ajr234
 --61 6a 72 32 33 34 0a
@@ -72,6 +72,7 @@ if (rising_edge(clk)) then
                     send <= '1';
                     char <= NETID(to_integer(unsigned(i)));
                     i <= std_logic_vector(unsigned(i) + 1);
+                    cur <= busyA;
                 elsif btn = '1' and rdy = '1' and i = n then
                     i <=  "000";
                 end if;
